@@ -4,6 +4,9 @@
   "description": "blancblanc ドッグライフスタイル ECサイト（storefront + 注文/商品管理 + Stripe決済）",
   "private": true,
   "type": "commonjs",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "start": "node server.js",
     "seed": "node lib/seed.js"
