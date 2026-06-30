@@ -343,7 +343,7 @@
 <!-- RANKING -->
 <section class="ranking">
   <div class="container">
-    <div class="sec-head"><span class="sec-en">RANKING</span><span class="sec-ja">人気ランキング</span></div>
+    <div class="sec-head"><span class="sec-en">PICK UP</span><span class="sec-ja">ピックアップ</span></div>
     <div class="grid" id="rankGrid"></div>
   </div>
 </section>
@@ -504,7 +504,7 @@
     if (newGrid) newGrid.innerHTML = news.map(p=>card(p, p.badge ? `<span class="card-flag ${p.badge==='COOL'?'cool':'new'}">${p.badge}</span>` : '')).join('');
 
     // RANKING：おすすめ順（編集可）。削除された商品は自動的に外れ、残り枠は他商品で補充
-    const RANK_IDS = ['goodnight','bear','meshivory','bearmat'];
+    const RANK_IDS = ['goodnight','bearmat','meshivory','bear'];
     const rank = take4(RANK_IDS.map(id=>P.find(p=>p.id===id)), P);
     const rankGrid = document.getElementById('rankGrid');
     if (rankGrid) rankGrid.innerHTML = rank.map((p,i)=>card(p, `<span class="rank-no">${i+1}</span>`)).join('');
