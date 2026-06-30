@@ -1,0 +1,9 @@
+{
+  "_comment": "このファイルを config.local.json にコピーして実際のキーを入れてください。config.local.json は公開しないでください。",
+  "stripeSecretKey": "<StripeダッシュボードのSecret keyをここに>",
+  "stripePublishableKey": "<StripeダッシュボードのPublishable keyをここに>",
+  "stripeWebhookSecret": "<StripeのWebhook signing secretをここに>",
+  "adminUser": "admin",
+  "adminPassword": "好きなパスワードに変更してください",
+  "baseUrl": "http://localhost:8080"
+}

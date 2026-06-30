@@ -1,0 +1,6 @@
+# 機密・実データ（公開しない）
+config.local.json
+data/
+node_modules/
+*.log
+.DS_Store

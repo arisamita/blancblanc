@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ご注文ありがとうございます｜blancblanc</title>
+<style>
+  :root{--ivory:#f6f4ef;--beige:#eae3d8;--pink:#ecdcd6;--pink-deep:#b9928a;--text:#2c2824;--text-soft:#8c857b;--line:#e6dfd4;--white:#fff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;color:var(--text);background:var(--ivory);line-height:1.9;font-size:14px;letter-spacing:.04em}
+  a{color:inherit}
+  .topbar{background:var(--beige);color:var(--text-soft);font-size:11px;text-align:center;padding:7px 0;letter-spacing:.1em}
+  .logo{display:flex;flex-direction:column;align-items:center;line-height:1;font-family:"Century Gothic","Futura",sans-serif;font-weight:300;font-size:27px;letter-spacing:.1em;color:#a99e90;padding:26px 0 0}
+  .logo i{font-style:normal;font-size:9px;letter-spacing:.42em;color:#c3bbb0;margin-top:7px;padding-left:.42em}
+  .wrap{max-width:560px;margin:36px auto 80px;padding:0 22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:48px 36px;text-align:center;box-shadow:0 18px 50px rgba(193,170,150,.18)}
+  .paw{font-size:46px;margin-bottom:12px}
+  h1{font-size:23px;font-weight:400;letter-spacing:.06em;margin-bottom:10px}
+  .lead{color:var(--text-soft);font-size:13px;margin-bottom:26px}
+  .ordno{display:inline-block;background:var(--ivory);border:1px solid var(--line);border-radius:30px;padding:8px 22px;font-size:13px;letter-spacing:.1em;margin-bottom:26px}
+  .ordno b{color:var(--pink-deep)}
+  .items{text-align:left;border-top:1px solid var(--line);padding-top:16px;margin-top:6px}
+  .li{display:flex;justify-content:space-between;font-size:13px;padding:5px 0}
+  .li .q{color:var(--text-soft);font-size:11px;margin-left:6px}
+  .sumrow{display:flex;justify-content:space-between;font-size:13px;padding:4px 0}
+  .sumrow.tot{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-weight:600;font-size:16px}
+  .home{display:inline-block;margin-top:30px;padding:14px 44px;background:var(--text);color:#fff;border-radius:3px;font-size:12px;letter-spacing:.2em;text-decoration:none;transition:.25s}
+  .home:hover{background:var(--pink-deep)}
+  .mock{font-size:11px;color:var(--text-soft);margin-top:16px}
+</style>
+</head>
+<body>
+<div class="topbar">ご注文ありがとうございました</div>
+<div class="logo">blancblanc<i>DOG LIFESTYLE</i></div>
+<div class="wrap">
+  <div class="card">
+    <div class="paw">🐾</div>
+    <h1>ご注文ありがとうございます</h1>
+    <p class="lead">ご注文を承りました。確認メールをお送りします（※テスト環境では送信されません）。</p>
+    <div class="ordno">注文番号：<b id="ordno">—</b></div>
+    <div id="detail"></div>
+    <a href="blancblanc.html" class="home">TOPにもどる</a>
+    <p class="mock" id="mockNote"></p>
+  </div>
+</div>
+<script>
+  const yen = (n) => '¥' + Number(n).toLocaleString('ja-JP');
+  const q = new URLSearchParams(location.search);
+  const id = q.get('order');
+  document.getElementById('ordno').textContent = id || '—';
+  if (q.get('mock')) document.getElementById('mockNote').textContent = '※ テストモードのため、実際の決済は行われていません。';
+  if (id) {
+    fetch('/api/order/' + encodeURIComponent(id)).then((r) => r.json()).then((o) => {
+      if (o.error) return;
+      const items = o.items.map((i) => `<div class="li"><span>${i.name}${i.color ? '（' + i.color + '）' : ''}<span class="q">×${i.qty}</span></span><span>${yen(i.price * i.qty)}</span></div>`).join('');
+      document.getElementById('detail').innerHTML = `<div class="items">${items}
+        <div class="sumrow" style="margin-top:10px"><span>小計</span><span>${yen(o.subtotal)}</span></div>
+        <div class="sumrow"><span>送料</span><span>${o.shipping ? yen(o.shipping) : '無料'}</span></div>
+        <div class="sumrow tot"><span>合計</span><span>${yen(o.total)}</span></div></div>`;
+    });
+  }
+</script>
+</body>
+</html>

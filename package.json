@@ -1,0 +1,14 @@
+{
+  "name": "blancblanc-shop",
+  "version": "1.0.0",
+  "description": "blancblanc ドッグライフスタイル ECサイト（storefront + 注文/商品管理 + Stripe決済）",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node lib/seed.js"
+  },
+  "dependencies": {
+    "stripe": "^17.5.0"
+  }
+}

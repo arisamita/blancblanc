@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商品詳細｜blancblanc</title>
+<style>
+  :root{--ivory:#f6f4ef;--beige:#eae3d8;--pink:#ecdcd6;--pink-deep:#b9928a;--blue:#d2dde0;--text:#2c2824;--text-soft:#8c857b;--line:#e6dfd4;--white:#fff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;color:var(--text);background:var(--ivory);line-height:1.9;font-size:14px;letter-spacing:.04em}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+  .topbar{background:var(--beige);color:var(--text-soft);font-size:11px;text-align:center;padding:7px 0;letter-spacing:.12em}
+  header{position:sticky;top:0;z-index:50;background:rgba(250,247,242,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-weight:300;font-size:29px;letter-spacing:.1em;color:#a99e90}
+  .logo i{font-style:normal;font-size:9px;letter-spacing:.42em;color:#c3bbb0;margin-top:8px;padding-left:.42em}
+  .header-icons{display:flex;gap:22px;font-size:12px}
+  .header-icons a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-soft)}
+  .icon{width:20px;height:20px;stroke:var(--text-soft);fill:none;stroke-width:1.4}
+  nav{border-bottom:1px solid var(--line);background:var(--white)}
+  .nav-list{display:flex;justify-content:space-evenly;align-items:center;list-style:none;font-size:13px;letter-spacing:.14em}
+  .nav-list>li>a{display:block;padding:16px 0}
+  .nav-list>li>a:hover{color:var(--pink-deep)}
+  .nav-list .sale>a{color:var(--pink-deep);font-weight:600}
+  .crumb{font-size:11px;color:var(--text-soft);padding:22px 0;letter-spacing:.08em}
+  .crumb a:hover{color:var(--pink-deep)}
+
+  .product{display:grid;grid-template-columns:1fr 1fr;gap:56px;padding-bottom:60px}
+  .gallery .main{background:#fff;border:1px solid var(--line);border-radius:8px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .gallery .main img{width:100%;height:100%;object-fit:cover}
+  .thumbs{display:flex;gap:10px;margin-top:12px}
+  .thumbs button{flex:0 0 78px;height:78px;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:pointer;overflow:hidden;padding:0}
+  .thumbs button.on{border-color:var(--pink-deep)}
+  .thumbs img{width:100%;height:100%;object-fit:cover}
+
+  .info .cat{font-size:11px;letter-spacing:.18em;color:var(--text-soft)}
+  .info h1{font-size:24px;font-weight:500;line-height:1.5;margin:8px 0 16px}
+  .stars{color:var(--pink-deep);font-size:13px;margin-bottom:18px}
+  .stars small{color:var(--text-soft);margin-left:8px}
+  .price{font-size:28px;font-weight:600;margin-bottom:4px}
+  .price small{font-size:12px;font-weight:400;color:var(--text-soft)}
+  .price-note{font-size:11px;color:var(--text-soft);margin-bottom:26px}
+  .lead{background:#fff;border-radius:8px;padding:18px 20px;margin-bottom:22px;font-size:13px;border:1px solid var(--line);white-space:pre-line}
+  .opt{margin-bottom:22px}
+  .opt label{display:block;font-size:12px;letter-spacing:.12em;margin-bottom:8px}
+  .colors{display:flex;gap:12px;flex-wrap:wrap}
+  .color{padding:9px 16px;border:1px solid var(--line);border-radius:30px;cursor:pointer;font-size:12px;color:var(--text-soft)}
+  .color.on{border-color:var(--pink-deep);color:var(--pink-deep);background:var(--pink)}
+  .qty{display:inline-flex;border:1px solid var(--line);border-radius:30px;overflow:hidden}
+  .qty button{width:38px;height:40px;border:none;background:#fff;font-size:16px;cursor:pointer;color:var(--text)}
+  .qty input{width:46px;text-align:center;border:none;font-size:14px}
+  .actions{display:flex;gap:12px;margin:8px 0 26px}
+  .btn{flex:1;padding:17px;border:none;border-radius:2px;font-size:12px;letter-spacing:.26em;cursor:pointer;transition:.25s}
+  .btn-cart{background:var(--text);color:#fff}
+  .btn-cart:hover{background:var(--pink-deep)}
+  .btn-fav{flex:0 0 56px;background:#fff;border:1px solid var(--line)}
+  .btn-fav:hover{border-color:var(--pink-deep)}
+  .meta{border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--text-soft)}
+  .meta div{display:flex;gap:12px;padding:5px 0}
+  .meta b{color:var(--text);min-width:80px;font-weight:500}
+  .preorder{background:#fdf3f3;border:1px solid var(--pink);border-radius:8px;padding:14px 16px;margin-bottom:22px;font-size:12px;color:var(--pink-deep);font-weight:600;line-height:1.7}
+  .preorder span{display:block;color:var(--text-soft);font-weight:400;margin-top:5px}
+
+  .detail{background:var(--white);padding:64px 0;border-top:1px solid var(--line)}
+  .detail h2{text-align:center;font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-size:26px;font-weight:300;letter-spacing:.24em;margin-bottom:8px}
+  .detail .sub{text-align:center;font-size:11px;color:var(--pink-deep);letter-spacing:.24em;margin-bottom:40px}
+  .detail-body{max-width:760px;margin:0 auto}
+  .detail-body p{margin-bottom:18px;white-space:pre-line}
+  .setlist{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}
+  .setlist li{list-style:none;background:var(--ivory);border:1px solid var(--line);border-radius:30px;padding:8px 18px;font-size:12px}
+  .points{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:36px 0}
+  .point{text-align:center}
+  .point .n{width:40px;height:40px;border-radius:50%;background:var(--pink);color:var(--pink-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:600}
+  .point h4{font-size:13px;margin-bottom:6px}
+  .point p{font-size:12px;color:var(--text-soft)}
+  .spec{width:100%;border-collapse:collapse;font-size:13px;margin-top:20px}
+  .spec th,.spec td{border:1px solid var(--line);padding:12px 16px;text-align:left}
+  .spec th{background:var(--ivory);width:140px;font-weight:500}
+  .note{font-size:11px;color:var(--text-soft);margin-top:18px;line-height:1.9}
+
+  .related{padding:60px 0}
+  .related h2{text-align:center;font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-size:26px;font-weight:300;letter-spacing:.24em;margin-bottom:40px}
+  .rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .rcard{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;transition:.25s}
+  .rcard:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(193,170,150,.16)}
+  .rcard .ri{aspect-ratio:1/1;overflow:hidden}
+  .rcard .ri img{width:100%;height:100%;object-fit:cover}
+  .rcard .rb{padding:10px;font-size:12px}
+  .rcard .rb .p{font-weight:600;margin-top:4px}
+  footer{background:var(--text);color:#9b9288;font-size:11px;padding:40px 0;text-align:center}
+
+  @media(max-width:900px){.product{grid-template-columns:1fr;gap:28px}.points,.rel-grid{grid-template-columns:1fr 1fr}.nav-list{justify-content:space-evenly}.nav-list>li>a{white-space:nowrap}}
+</style>
+</head>
+<body>
+<div class="topbar">¥10,000以上で全国送料無料／¥10,000未満は全国一律¥600</div>
+<header>
+  <div class="container header-inner">
+    <a href="blancblanc.html" class="logo">blancblanc<i>DOG LIFESTYLE</i></a>
+    <div class="header-icons">
+      <a href="#"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg><span>検索</span></a>
+      <a href="#"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3 1.2 3.8 2.3C10.6 6.2 11.6 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z"/></svg><span>お気に入り</span></a>
+      <a href="cart.html" style="position:relative"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg><span>カート</span><b data-cart-badge style="display:none;position:absolute;top:-6px;right:6px;background:var(--pink-deep);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px">0</b></a>
+    </div>
+  </div>
+  <nav>
+    <ul class="nav-list container">
+      <li><a href="blancblanc.html">HOME</a></li><li><a href="goods.html">ALL ITEM</a></li>
+      <li class="sale"><a href="#">SALE</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="app" class="container"></main>
+
+<script src="cart.js"></script>
+<script src="products.js"></script>
+<script>
+  const yen = n => '¥' + n.toLocaleString('ja-JP');
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const p = (window.PRODUCTS || []).find(x => x.id === id);
+  const catLabel = k => ((window.CATS||[]).find(c=>c.key===k)||{}).label || 'おもちゃ';
+
+  function defaultFeatures(p){
+    const t = (p.tag||'');
+    if(t.includes('NOSE WORK')) return [['知育・ノーズワーク','おやつを隠して嗅ぐ・探す本能を刺激します。'],['留守番対策','ひとり時間の退屈解消にもおすすめ。'],['やわらか素材','噛んでも安心のやさしい肌触り。']];
+    if(t.includes('ROPE'))      return [['デンタルケア','ロープが歯の汚れをやさしく除去。'],['引っ張り遊び','飼い主さんとのコミュニケーションに。'],['丈夫な作り','噛みごたえのあるしっかり素材。']];
+    if(t.includes('DENTAL'))    return [['デンタルケア','噛んで歯みがき習慣をサポート。'],['弾力素材','ぷにぷに食感で夢中に。'],['お手入れ簡単','水洗いできて清潔。']];
+    if(t.includes('PLUSH'))     return [['抱き心地','ふわふわで安心感のあるプラッシュ。'],['軽量','小さな子でも運びやすい軽さ。'],['写真映え','飾ってもかわいいデザイン。']];
+    if(t.includes('CARRY'))     return [['通気性','メッシュ窓で快適なおでかけ。'],['軽量設計','持ち運びらくらく。'],['お出かけに','お散歩・通院・旅行のおともに。']];
+    if(t.includes('INTERIOR'))  return [['ふわもこ','包み込まれるような寝心地。'],['お部屋になじむ','やさしいナチュラルカラー。'],['お手入れ','カバーを外して洗えます。']];
+    if(t.includes('HAT')||p.cat==='wear') return [['日よけ','夏のお散歩の紫外線対策に。'],['サイズ調整','面ファスナーでフィット。'],['写真映え','うさ耳つきでとびきりキュート。']];
+    return [['音遊び','噛むと鳴る笛入りで夢中に。'],['ほどよいサイズ','くわえて運びやすい大きさ。'],['やわらか素材','安心のやさしい肌触り。']];
+  }
+
+  function render(){
+    const app = document.getElementById('app');
+    if(!p){ app.innerHTML = '<div class="crumb"><a href="goods.html">GOODS</a> ＞ 商品が見つかりません</div><p style="padding:40px 0">商品が見つかりませんでした。<a href="goods.html" style="color:var(--pink-deep)">商品一覧へ戻る</a></p>'; document.title='商品が見つかりません｜blancblanc'; return; }
+    document.title = p.name + '｜blancblanc';
+
+    const feats = (p.features || defaultFeatures(p)).slice(0,3);
+    const related = window.PRODUCTS.filter(x=>x.id!==p.id && x.cat===p.cat).concat(window.PRODUCTS.filter(x=>x.cat!==p.cat)).slice(0,4);
+    const hasVariants = Array.isArray(p.variants) && p.variants.length > 0;
+    const startPrice = hasVariants ? p.variants[0].price : p.price;
+
+    app.innerHTML = `
+      <div class="crumb"><a href="blancblanc.html">HOME</a> ＞ <a href="goods.html">GOODS</a> ＞ <a href="goods.html?cat=${p.cat}">${catLabel(p.cat)}</a> ＞ ${p.name}</div>
+      <div class="product">
+        <div class="gallery">
+          <div class="main" id="mainImg"><img src="${p.imgs[0]}" alt="${p.name}"></div>
+          ${p.imgs.length>1 ? `<div class="thumbs">${p.imgs.map((s,i)=>`<button class="${i?'':'on'}" data-src="${s}"><img src="${s}" alt=""></button>`).join('')}</div>` : ''}
+        </div>
+        <div class="info">
+          <p class="cat">${p.tag||''}</p>
+          <h1>${p.name}</h1>
+          <div class="price"><span id="price">${yen(startPrice)}</span> <small>(税込)</small></div>
+          <p class="price-note">¥10,000以上で送料無料（未満は全国一律¥600）</p>
+          <div class="lead">${p.lead||''}</div>
+          <div class="preorder">先行販売商品｜2026年8月頃より順次発送予定<span>※現在、blancblancの商品はすべて先行販売商品です。ご注文後すぐの発送ではございませんので、あらかじめご了承ください。</span></div>
+          ${p.pick ? `<div class="opt"><label>お花を${p.pick.count}本選ぶ（${p.pick.options.length}種から・重複不可）：<span id="pickCount">0/${p.pick.count}</span></label><div class="colors" id="picks">${p.pick.options.map(o=>`<span class="color" data-c="${o}">${o}</span>`).join('')}</div><p id="pickHint" style="font-size:11px;color:var(--text-soft);margin-top:8px">お好きなお花を${p.pick.count}本タップしてお選びください。</p></div>`
+            : hasVariants ? `<div class="opt"><label>タイプ：<span id="optName">${p.variants[0].label}</span></label><div class="colors" id="colors">${p.variants.map((v,i)=>`<span class="color ${i?'':'on'}" data-c="${v.label}" data-price="${v.price}">${v.label}（${yen(v.price)}）</span>`).join('')}</div></div>`
+            : (p.colors && p.colors.length) ? `<div class="opt"><label>カラー / タイプ：<span id="optName">${p.colors[0]}</span></label><div class="colors" id="colors">${p.colors.map((c,i)=>`<span class="color ${i?'':'on'}" data-c="${c}">${c}</span>`).join('')}</div></div>` : ''}
+          <div class="opt"><label>数量</label><div class="qty"><button id="minus">−</button><input id="qty" value="1" readonly><button id="plus">＋</button></div></div>
+          <div class="actions"><button class="btn btn-cart" id="cart">先行販売に申し込む</button><button class="btn btn-fav" title="お気に入り">♡</button></div>
+          <div class="meta">
+            <div><b>商品番号</b><span>BB-${p.id.toUpperCase()}</span></div>
+            ${(p.set && p.set.length) ? `<div><b>セット内容</b><span>${p.set.join('／')}</span></div>` : ''}
+            <div><b>素材</b><span>${p.material||'-'}</span></div>
+            <div><b>発送</b><span>平日14時までのご注文で当日発送</span></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="related">
+        <div class="container">
+          <h2>RELATED ITEMS</h2>
+          <div class="rel-grid">
+            ${related.map(r=>`<a class="rcard" href="product.html?id=${r.id}"><div class="ri"><img src="${r.imgs[0]}" alt=""></div><div class="rb">${r.name}<div class="p">${yen(r.price)}${(r.variants&&r.variants.length&&r.variants.some(v=>v.price!==r.price))?'〜':''}</div></div></a>`).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+
+    // interactions
+    document.querySelectorAll('.thumbs button').forEach(b=>b.addEventListener('click',()=>{
+      document.getElementById('mainImg').innerHTML = '<img src="'+b.dataset.src+'" alt="'+p.name+'">';
+      document.querySelectorAll('.thumbs button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+    }));
+    const colors = document.getElementById('colors');
+    if(colors) colors.querySelectorAll('.color').forEach(c=>c.addEventListener('click',()=>{
+      colors.querySelectorAll('.color').forEach(x=>x.classList.remove('on')); c.classList.add('on');
+      document.getElementById('optName').textContent = c.dataset.c;
+      if(c.dataset.price){
+        const pr = +c.dataset.price;
+        document.getElementById('price').textContent = yen(pr);
+        const pts = document.getElementById('pts'); if(pts) pts.textContent = Math.round(pr/100);
+      }
+      // 色を選ぶとメイン画像を切り替え（color_img 設定時）
+      const src = p.colorImg && p.colorImg[c.dataset.c];
+      if(src){
+        document.getElementById('mainImg').innerHTML = '<img src="'+src+'" alt="'+p.name+'">';
+        document.querySelectorAll('.thumbs button').forEach(b=>b.classList.toggle('on', b.dataset.src===src));
+      }
+    }));
+    // お花ピッカー（N種から指定本数を重複なく選ぶ）
+    const picks = document.getElementById('picks');
+    if(picks){
+      const cnt = p.pick.count;
+      const update = ()=>{ document.getElementById('pickCount').textContent = picks.querySelectorAll('.color.on').length + '/' + cnt; };
+      picks.querySelectorAll('.color').forEach(c=>c.addEventListener('click',()=>{
+        const hint = document.getElementById('pickHint');
+        if(!c.classList.contains('on') && picks.querySelectorAll('.color.on').length >= cnt){
+          hint.textContent = cnt+'本まで選べます。別のお花を外してからお選びください。';
+          return;
+        }
+        c.classList.toggle('on'); update();
+        hint.textContent = 'お好きなお花を'+cnt+'本タップしてお選びください。';
+      }));
+    }
+    const qty = document.getElementById('qty');
+    document.getElementById('minus').onclick = ()=> qty.value = Math.max(1, +qty.value - 1);
+    document.getElementById('plus').onclick  = ()=> qty.value = +qty.value + 1;
+    document.getElementById('cart').onclick = ()=>{
+      let optLabel = null;
+      if(p.pick){
+        const sel = [...picks.querySelectorAll('.color.on')].map(x=>x.dataset.c);
+        const ordered = p.pick.options.filter(o=>sel.includes(o));
+        if(ordered.length !== p.pick.count){ alert('お花を'+p.pick.count+'本お選びください。'); return; }
+        optLabel = ordered.join('／');
+      } else {
+        const opt = document.getElementById('optName');
+        optLabel = opt ? opt.textContent : null;
+      }
+      Cart.add(p.id, +qty.value, optLabel);
+      location.href = 'cart.html';
+    };
+    window.scrollTo(0,0);
+  }
+  render();
+</script>
+</body>
+</html>

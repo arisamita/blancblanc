@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ご注文内容の確認｜blancblanc</title>
+<style>
+  :root{--ivory:#f6f4ef;--beige:#eae3d8;--pink:#ecdcd6;--pink-deep:#b9928a;--blue:#d2dde0;--text:#2c2824;--text-soft:#8c857b;--line:#e6dfd4;--white:#fff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;color:var(--text);background:var(--ivory);line-height:1.8;font-size:14px;letter-spacing:.04em}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:760px;margin:0 auto;padding:0 24px}
+  .topbar{background:var(--beige);color:var(--text-soft);font-size:11px;text-align:center;padding:7px 0;letter-spacing:.1em}
+  header{position:sticky;top:0;z-index:50;background:rgba(246,244,239,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-family:"Century Gothic","Futura",sans-serif;font-weight:300;font-size:27px;letter-spacing:.1em;color:#a99e90}
+  .logo i{font-style:normal;font-size:9px;letter-spacing:.42em;color:#c3bbb0;margin-top:7px;padding-left:.42em}
+  .header-links{display:flex;gap:22px;font-size:12px;color:var(--text-soft)}
+  h1.page-ttl{text-align:center;font-size:26px;font-weight:300;letter-spacing:.18em;padding:40px 0 8px}
+  .page-sub{text-align:center;font-size:11px;letter-spacing:.3em;color:var(--text-soft);margin-bottom:10px}
+  .steps{display:flex;justify-content:center;gap:8px;font-size:11px;color:var(--text-soft);margin-bottom:36px;letter-spacing:.08em}
+  .steps b{color:var(--pink-deep)}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:20px}
+  .panel h2{font-size:14px;letter-spacing:.1em;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .edit-link{font-size:11px;color:var(--pink-deep);text-decoration:underline;letter-spacing:.04em;font-weight:400;cursor:pointer}
+  .item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .item:last-child{border-bottom:none}
+  .item-img{flex:0 0 70px;height:70px;border-radius:8px;overflow:hidden;background:var(--beige)}
+  .item-img img{width:100%;height:100%;object-fit:cover}
+  .item-main{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .item-name{font-size:13px;margin-bottom:4px}
+  .item-color{font-size:11px;color:var(--text-soft)}
+  .item-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:13px}
+  .item-bottom .q{color:var(--text-soft);font-size:11px}
+  .row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0}
+  .row.total{border-top:1px solid var(--line);margin-top:8px;padding-top:14px;font-size:17px;font-weight:600}
+  .ship-note{font-size:11px;color:var(--text-soft);margin-top:4px}
+  .info-row{display:flex;font-size:13px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .info-row:last-child{border-bottom:none}
+  .info-row b{flex:0 0 110px;color:var(--text-soft);font-weight:500;font-size:12px}
+  .info-row span{flex:1;white-space:pre-line}
+  .checkout-btn{width:100%;padding:17px;background:var(--text);color:#fff;border:none;border-radius:3px;font-size:13px;letter-spacing:.22em;cursor:pointer;transition:.25s;margin-top:6px}
+  .checkout-btn:hover{background:var(--pink-deep)}
+  .checkout-btn:disabled{opacity:.5;cursor:not-allowed}
+  .back-btn{display:block;width:100%;text-align:center;padding:15px;background:#fff;color:var(--text-soft);border:1px solid var(--line);border-radius:3px;font-size:12px;letter-spacing:.18em;margin-top:10px}
+  .back-btn:hover{border-color:var(--pink-deep);color:var(--pink-deep)}
+  .secure{font-size:11px;color:var(--text-soft);text-align:center;margin-top:12px}
+  .empty{text-align:center;color:var(--text-soft);padding:50px 0}
+  .empty a{display:inline-block;margin-top:18px;padding:13px 40px;background:var(--text);color:#fff;border-radius:3px;font-size:12px;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<div class="topbar">¥10,000以上で全国送料無料／¥10,000未満は全国一律¥600</div>
+<header>
+  <div class="container header-inner">
+    <a href="blancblanc.html" class="logo">blancblanc<i>DOG LIFESTYLE</i></a>
+    <div class="header-links">
+      <a href="goods.html">ALL ITEM</a>
+      <a href="blancblanc.html">HOME</a>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <h1 class="page-ttl">CONFIRM</h1>
+  <p class="page-sub">ご注文内容の確認</p>
+  <p class="steps">カート　＞　お客様情報　＞　<b>ご注文確認</b></p>
+
+  <div id="app"></div>
+</div>
+
+<script src="cart.js"></script>
+<script src="products.js"></script>
+<script>
+  const yen = (n) => '¥' + Number(n).toLocaleString('ja-JP');
+  let CFG = { freeShippingThreshold: 10000, shippingFee: 600, stripeEnabled: false };
+  const byId = (id) => (window.PRODUCTS || []).find((p) => p.id === id);
+  const priceOf = (p, label) => {
+    if (Array.isArray(p.variants) && p.variants.length) {
+      const v = p.variants.find((v) => v.label === label);
+      return (v ? v.price : p.variants[0].price);
+    }
+    return p.price;
+  };
+
+  const items = Cart.items();
+  let customer = null;
+  try { customer = JSON.parse(sessionStorage.getItem('bb_customer') || 'null'); } catch (_) {}
+
+  const app = document.getElementById('app');
+
+  function render() {
+    if (!items.length) {
+      app.innerHTML = '<div class="panel"><div class="empty">カートは空です。<br><a href="goods.html">商品を見る</a></div></div>';
+      return;
+    }
+    if (!customer || !customer.name || !customer.email || !customer.address) {
+      // お客様情報が無ければカートの入力からやり直し
+      location.href = 'cart.html';
+      return;
+    }
+
+    let subtotal = 0;
+    const itemsHtml = items.map((it) => {
+      const p = byId(it.id); if (!p) return '';
+      const unit = priceOf(p, it.color);
+      const line = unit * it.qty; subtotal += line;
+      const img = (p.imgs || [])[0] || '';
+      return `<div class="item">
+        <div class="item-img"><img src="${img}" alt=""></div>
+        <div class="item-main">
+          <div class="item-name">${p.name}</div>
+          ${it.color ? `<div class="item-color">${it.color}</div>` : ''}
+          <div class="item-bottom"><span class="q">×${it.qty}</span><span>${yen(line)}</span></div>
+        </div>
+      </div>`;
+    }).join('');
+
+    const shipping = subtotal > 0 && subtotal < CFG.freeShippingThreshold ? CFG.shippingFee : 0;
+    const total = subtotal + shipping;
+
+    app.innerHTML = `
+      <div class="panel">
+        <h2>ご注文商品<span class="edit-link" onclick="location.href='cart.html'">カートを編集</span></h2>
+        ${itemsHtml}
+        <div class="row" style="margin-top:10px"><span>小計</span><span>${yen(subtotal)}</span></div>
+        <div class="row"><span>送料</span><span>${shipping ? yen(shipping) : '無料'}</span></div>
+        <div class="row total"><span>合計</span><span>${yen(total)}</span></div>
+        ${subtotal < CFG.freeShippingThreshold ? `<p class="ship-note">あと ${yen(CFG.freeShippingThreshold - subtotal)} で送料無料</p>` : ''}
+      </div>
+
+      <div class="panel">
+        <h2>お届け先・お客様情報<span class="edit-link" onclick="location.href='cart.html'">編集する</span></h2>
+        <div class="info-row"><b>お名前</b><span>${esc(customer.name)}</span></div>
+        <div class="info-row"><b>メールアドレス</b><span>${esc(customer.email)}</span></div>
+        ${customer.phone ? `<div class="info-row"><b>電話番号</b><span>${esc(customer.phone)}</span></div>` : ''}
+        ${customer.postal ? `<div class="info-row"><b>郵便番号</b><span>${esc(customer.postal)}</span></div>` : ''}
+        <div class="info-row"><b>ご住所</b><span>${esc(customer.address)}</span></div>
+        ${customer.note ? `<div class="info-row"><b>備考</b><span>${esc(customer.note)}</span></div>` : ''}
+      </div>
+
+      <div class="panel">
+        <button class="checkout-btn" id="confirmBtn">この内容でご注文を確定する</button>
+        <a class="back-btn" href="cart.html">内容を修正する</a>
+        <p class="secure" id="secureNote">🔒 安全な決済ページに移動します</p>
+      </div>
+    `;
+    document.getElementById('confirmBtn').addEventListener('click', submitOrder);
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  async function submitOrder() {
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled = true; btn.textContent = '処理中…';
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, customer }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '注文に失敗しました');
+      sessionStorage.setItem('bb_last_order', data.orderId);
+      sessionStorage.removeItem('bb_customer');
+      Cart.clear();
+      location.href = data.redirectUrl;
+    } catch (err) {
+      alert(err.message);
+      btn.disabled = false; btn.textContent = 'この内容でご注文を確定する';
+    }
+  }
+
+  fetch('/api/config').then((r) => r.json()).then((c) => {
+    CFG = c;
+    render();
+    if (!c.stripeEnabled) {
+      const note = document.getElementById('secureNote');
+      if (note) note.textContent = '※ 現在はテストモード（決済なし）で注文を確定します';
+    }
+  }).catch(render);
+</script>
+</body>
+</html>

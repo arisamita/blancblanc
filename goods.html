@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOODS｜blancblanc</title>
+<style>
+  :root{--ivory:#f6f4ef;--beige:#eae3d8;--pink:#ecdcd6;--pink-deep:#b9928a;--blue:#d2dde0;--text:#2c2824;--text-soft:#8c857b;--line:#e6dfd4;--white:#fff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;color:var(--text);background:var(--ivory);line-height:1.8;font-size:14px;letter-spacing:.04em}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+  .topbar{background:var(--beige);color:var(--text-soft);font-size:11px;text-align:center;padding:7px 0;letter-spacing:.12em}
+  header{position:sticky;top:0;z-index:50;background:rgba(250,247,242,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-weight:300;font-size:29px;letter-spacing:.1em;color:#a99e90}
+  .logo i{font-style:normal;font-size:9px;letter-spacing:.42em;color:#c3bbb0;margin-top:8px;padding-left:.42em}
+  .header-icons{display:flex;gap:22px;font-size:12px}
+  .header-icons a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-soft)}
+  .icon{width:20px;height:20px;stroke:var(--text-soft);fill:none;stroke-width:1.4}
+  nav{border-bottom:1px solid var(--line);background:var(--white)}
+  .nav-list{display:flex;justify-content:space-evenly;align-items:center;list-style:none;font-size:13px;letter-spacing:.14em}
+  .nav-list>li>a{display:block;padding:16px 0}
+  .nav-list>li>a:hover{color:var(--pink-deep)}
+  .nav-list .sale>a{color:var(--pink-deep);font-weight:600}
+  .crumb{font-size:11px;color:var(--text-soft);padding:22px 0;letter-spacing:.08em}
+  .crumb a:hover{color:var(--pink-deep)}
+  .page-head{text-align:center;margin:8px 0 40px}
+  .page-head .en{font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-size:34px;font-weight:300;letter-spacing:.24em}
+  .page-head .ja{font-size:12px;letter-spacing:.28em;color:var(--pink-deep);margin-top:8px;display:block}
+  .layout{display:grid;grid-template-columns:200px 1fr;gap:46px;padding-bottom:80px}
+  .side h4{font-size:12px;letter-spacing:.16em;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+  .side ul{list-style:none;font-size:12px}
+  .side ul li{padding:7px 0;color:var(--text-soft);cursor:pointer}
+  .side ul li:hover{color:var(--pink-deep)}
+  .side ul li.on{color:var(--pink-deep);font-weight:600}
+  .side ul li span{color:var(--line);margin-left:4px}
+  .count{font-size:12px;color:var(--text-soft);margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .card{background:var(--white);border-radius:2px;overflow:hidden;transition:.3s;display:block}
+  .card:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(120,108,96,.12)}
+  .card-img{position:relative;aspect-ratio:1/1;background:#fff;border:1px solid var(--line);overflow:hidden}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .card:hover .card-img img{transform:scale(1.05)}
+  .card-flag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:.08em;padding:4px 11px;border-radius:3px;background:var(--text);color:#fff;z-index:2}
+  .card-body{padding:14px 8px 12px}
+  .card-cat{font-size:10px;color:var(--text-soft);letter-spacing:.14em}
+  .card-name{font-size:13px;margin:5px 0 7px;min-height:38px}
+  .card:hover .card-name{color:var(--pink-deep)}
+  .card-price{font-size:15px;font-weight:600}
+  .card-price small{font-size:10px;font-weight:400;color:var(--text-soft)}
+  footer{background:var(--text);color:#9b9288;font-size:11px;padding:40px 0;text-align:center}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.side .box{flex:1;min-width:140px}.grid{grid-template-columns:1fr 1fr}.nav-list{justify-content:space-evenly}.nav-list>li>a{white-space:nowrap}}
+  @media(max-width:520px){.grid{grid-template-columns:1fr 1fr;gap:14px}}
+</style>
+</head>
+<body>
+<div class="topbar">¥10,000以上で全国送料無料／¥10,000未満は全国一律¥600</div>
+<header>
+  <div class="container header-inner">
+    <a href="blancblanc.html" class="logo">blancblanc<i>DOG LIFESTYLE</i></a>
+    <div class="header-icons">
+      <a href="#"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg><span>検索</span></a>
+      <a href="#"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3 1.2 3.8 2.3C10.6 6.2 11.6 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z"/></svg><span>お気に入り</span></a>
+      <a href="cart.html" style="position:relative"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg><span>カート</span><b data-cart-badge style="display:none;position:absolute;top:-6px;right:6px;background:var(--pink-deep);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 4px">0</b></a>
+    </div>
+  </div>
+  <nav>
+    <ul class="nav-list container">
+      <li><a href="blancblanc.html">HOME</a></li>
+      <li><a href="goods.html">ALL ITEM</a></li>
+      <li class="sale"><a href="#">SALE</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="crumb"><a href="blancblanc.html">HOME</a> ＞ <a href="goods.html">GOODS</a> ＞ <span id="crumbCat">すべて</span></div>
+  <div class="page-head"><span class="en">GOODS</span><span class="ja" id="catJa">すべての商品</span></div>
+
+  <div class="layout">
+    <aside class="side">
+      <div class="box"><h4>CATEGORY</h4><ul id="catList"></ul></div>
+    </aside>
+    <main>
+      <p class="count" id="count"></p>
+      <div class="grid" id="grid"></div>
+    </main>
+  </div>
+</div>
+
+<footer>© 2026 blancblanc. All rights reserved.</footer>
+
+<script src="products.js"></script>
+<script>
+  const yen = n => '¥' + n.toLocaleString('ja-JP');
+  const params = new URLSearchParams(location.search);
+  let cur = params.get('cat') || 'all';
+  const cats = window.CATS || [{key:'all',label:'すべて'}];
+  if(!cats.find(c=>c.key===cur)) cur='all';
+
+  function count(key){ return key==='all' ? PRODUCTS.length : PRODUCTS.filter(p=>p.cat===key).length; }
+
+  function renderCats(){
+    document.getElementById('catList').innerHTML = cats.map(c=>
+      `<li class="${c.key===cur?'on':''}" data-k="${c.key}">${c.label}<span>(${count(c.key)})</span></li>`).join('');
+    document.querySelectorAll('#catList li').forEach(li=>li.addEventListener('click',()=>{
+      cur = li.dataset.k; history.replaceState(null,'', cur==='all'?'goods.html':'goods.html?cat='+cur); renderAll();
+    }));
+  }
+  function renderAll(){
+    const label = (cats.find(c=>c.key===cur)||{}).label || 'すべて';
+    document.getElementById('crumbCat').textContent = label;
+    document.getElementById('catJa').textContent = cur==='all' ? 'すべての商品' : label;
+    const list = cur==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===cur);
+    document.getElementById('count').textContent = list.length + '件の商品';
+    document.getElementById('grid').innerHTML = list.map(p=>`
+      <a class="card" href="product.html?id=${p.id}">
+        <div class="card-img">${p.badge?`<span class="card-flag">${p.badge}</span>`:''}<img src="${p.imgs[0]}" alt="${p.name}"></div>
+        <div class="card-body">
+          <p class="card-cat">${p.tag||''}</p>
+          <p class="card-name">${p.name}</p>
+          <p class="card-price">${yen(p.price)}${(p.variants&&p.variants.length&&p.variants.some(v=>v.price!==p.price))?'〜':''} <small>(税込)</small></p>
+        </div>
+      </a>`).join('');
+    document.querySelectorAll('#catList li').forEach(li=>li.classList.toggle('on', li.dataset.k===cur));
+  }
+  renderCats(); renderAll();
+</script>
+<script src="cart.js"></script>
+</body>
+</html>
