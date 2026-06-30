@@ -36,7 +36,7 @@
   <div class="card">
     <div class="paw">🐾</div>
     <h1>ご注文ありがとうございます</h1>
-    <p class="lead">ご注文を承りました。確認メールをお送りします（※テスト環境では送信されません）。</p>
+    <p class="lead" id="leadText">ご注文を承りました。</p>
     <div class="ordno">注文番号：<b id="ordno">—</b></div>
     <div id="detail"></div>
     <a href="blancblanc.html" class="home">TOPにもどる</a>
@@ -49,6 +49,11 @@
   const id = q.get('order');
   document.getElementById('ordno').textContent = id || '—';
   if (q.get('mock')) document.getElementById('mockNote').textContent = '※ テストモードのため、実際の決済は行われていません。';
+  fetch('/api/config').then((r) => r.json()).then((c) => {
+    document.getElementById('leadText').textContent = c.mailEnabled
+      ? 'ご注文を承りました。確認メールをお送りしました。'
+      : 'ご注文を承りました。';
+  }).catch(() => {});
   if (id) {
     fetch('/api/order/' + encodeURIComponent(id)).then((r) => r.json()).then((o) => {
       if (o.error) return;

@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const config = require('./config');
 const { db, seedIfEmpty, rowToProduct } = require('./lib/db');
 const { load } = require('./lib/loadProducts');
+const { sendOrderEmails } = require('./lib/mail');
 
 const root = __dirname;
 const PUBLIC_DIR = root;
@@ -173,6 +174,7 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, {
         stripePublishableKey: config.stripePublishableKey || '',
         stripeEnabled: !!stripe,
+        mailEnabled: !!config.resendApiKey,
         freeShippingThreshold: config.freeShippingThreshold,
         shippingFee: config.shippingFee,
       });
@@ -190,7 +192,8 @@ const server = http.createServer(async (req, res) => {
       const orderId = saveOrder(order, body.customer || {});
 
       if (!stripe) {
-        // Stripe未設定：テスト用にそのまま完了ページへ（決済なし）
+        // Stripe未設定：テスト用にそのまま完了ページへ（決済なし）。確認メールはここで送信。
+        sendOrderEmails(getOrderFull(orderId)).catch((e) => console.error('[mail] 送信エラー:', e.message));
         return sendJson(res, 200, { mode: 'mock', orderId, redirectUrl: `/success.html?order=${orderId}&mock=1` });
       }
 
@@ -250,6 +253,9 @@ const server = http.createServer(async (req, res) => {
         const orderId = s.metadata?.orderId;
         if (orderId) {
           db.prepare("UPDATE orders SET status='paid', payment_status='paid' WHERE id=?").run(orderId);
+          // 決済確定後に確認メールを送信
+          const fullOrder = getOrderFull(orderId);
+          if (fullOrder) sendOrderEmails(fullOrder).catch((e) => console.error('[mail] 送信エラー:', e.message));
         }
       }
       return sendJson(res, 200, { received: true });

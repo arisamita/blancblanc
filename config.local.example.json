@@ -5,5 +5,8 @@
   "stripeWebhookSecret": "<StripeのWebhook signing secretをここに>",
   "adminUser": "admin",
   "adminPassword": "好きなパスワードに変更してください",
-  "baseUrl": "http://localhost:8080"
+  "baseUrl": "http://localhost:8080",
+  "resendApiKey": "<ResendダッシュボードのAPI Keyをここに>",
+  "mailFrom": "blancblanc <onboarding@resend.dev>",
+  "ownerEmail": "info@blancblanc.jp"
 }

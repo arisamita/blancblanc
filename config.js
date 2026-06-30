@@ -19,6 +19,11 @@ module.exports = {
   adminUser: process.env.ADMIN_USER || local.adminUser || 'admin',
   adminPassword: process.env.ADMIN_PASSWORD || local.adminPassword || 'blancblanc',
 
+  // メール通知（Resend）。未設定でもサイトは動き、メール送信だけスキップされます。
+  resendApiKey: process.env.RESEND_API_KEY || local.resendApiKey || '',
+  mailFrom: process.env.MAIL_FROM || local.mailFrom || 'blancblanc <onboarding@resend.dev>',
+  ownerEmail: process.env.OWNER_EMAIL || local.ownerEmail || 'info@blancblanc.jp',
+
   // 送料設定（フロントと合わせる）
   freeShippingThreshold: 10000, // 円
   shippingFee: 600,             // 円
