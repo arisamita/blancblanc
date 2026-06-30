@@ -330,7 +330,8 @@ const server = http.createServer(async (req, res) => {
     // 静的ファイル ------------------------------------------------------
     if (isBlocked(pathname)) return send(res, 403, 'Forbidden');
     let urlPath = pathname;
-    if (urlPath.endsWith('/')) urlPath += 'index.html';     // ディレクトリ → index.html
+    if (urlPath === '/') urlPath = '/blancblanc.html';      // トップページ
+    else if (urlPath.endsWith('/')) urlPath += 'index.html'; // ディレクトリ → index.html
     else if (!path.extname(urlPath)) {                        // 拡張子なし（/admin など）
       try { if (fs.statSync(path.join(PUBLIC_DIR, urlPath)).isDirectory()) urlPath += '/index.html'; } catch (_) {}
     }
