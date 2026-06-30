@@ -498,7 +498,7 @@
     };
 
     // NEW ARRIVALS：表示順（編集可）。指定IDを優先し、残り枠はバッジ付き→他商品で補充。削除された商品は自動的に外れる
-    const NEW_IDS = ['breakfast','bearmat','cake'];
+    const NEW_IDS = ['goodnight','bearmat','breakfast','bear'];
     const news = take4(NEW_IDS.map(id=>P.find(p=>p.id===id)), P.filter(p=>p.badge).concat(P));
     const newGrid = document.getElementById('newGrid');
     if (newGrid) newGrid.innerHTML = news.map(p=>card(p, p.badge ? `<span class="card-flag ${p.badge==='COOL'?'cool':'new'}">${p.badge}</span>` : '')).join('');
