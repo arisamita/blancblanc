@@ -302,7 +302,7 @@
     <a href="blancblanc.html" class="logo">blancblanc<i>DOG LIFESTYLE</i></a>
     <div class="header-icons">
       <a href="#"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg><span>検索</span></a>
-      <a href="#"><svg class="icon" viewBox="0 0 24 24"><path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 Z"/></svg><span>お気に入り</span></a>
+      <a href="favorites.html" style="position:relative"><svg class="icon" viewBox="0 0 24 24"><path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 Z"/></svg><span>お気に入り</span><b data-fav-badge style="display:none;position:absolute;top:-6px;right:6px;background:var(--pink-deep);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 4px">0</b></a>
       <a href="cart.html" style="position:relative"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg><span>カート</span><b data-cart-badge style="display:none;position:absolute;top:-6px;right:6px;background:var(--pink-deep);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 4px">0</b></a>
       <a href="#"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg><span>ログイン</span></a>
     </div>
@@ -513,6 +513,7 @@
     if (rankGrid) rankGrid.innerHTML = rank.map((p,i)=>card(p, `<span class="rank-no">${i+1}</span>`)).join('');
   })();
 </script>
+<script src="favs.js"></script>
 <script src="cart.js"></script>
 </body>
 </html>

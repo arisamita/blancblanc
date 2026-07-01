@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お気に入り｜blancblanc</title>
+<style>
+  :root{--ivory:#f6f4ef;--beige:#eae3d8;--pink:#ecdcd6;--pink-deep:#b9928a;--blue:#d2dde0;--text:#2c2824;--text-soft:#8c857b;--line:#e6dfd4;--white:#fff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;color:var(--text);background:var(--ivory);line-height:1.8;font-size:14px;letter-spacing:.04em}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1080px;margin:0 auto;padding:0 24px}
+  .topbar{background:var(--beige);color:var(--text-soft);font-size:11px;text-align:center;padding:7px 0;letter-spacing:.1em}
+  header{position:sticky;top:0;z-index:50;background:rgba(250,247,242,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-weight:300;font-size:29px;letter-spacing:.1em;color:#a99e90}
+  .logo i{font-style:normal;font-size:9px;letter-spacing:.42em;color:#c3bbb0;margin-top:8px;padding-left:.42em}
+  .header-icons{display:flex;gap:22px;font-size:12px}
+  .header-icons a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-soft)}
+  .icon{width:20px;height:20px;stroke:var(--text-soft);fill:none;stroke-width:1.4}
+  nav{border-bottom:1px solid var(--line);background:var(--white)}
+  .nav-list{display:flex;justify-content:space-evenly;align-items:center;list-style:none;font-size:13px;letter-spacing:.14em}
+  .nav-list>li>a{display:block;padding:16px 0}
+  .nav-list>li>a:hover{color:var(--pink-deep)}
+  .nav-list .sale>a{color:var(--pink-deep);font-weight:600}
+  h1.page-ttl{text-align:center;font-family:"Century Gothic","Futura","Trebuchet MS","Avenir",sans-serif;font-size:28px;font-weight:300;letter-spacing:.22em;padding:44px 0 8px}
+  .page-sub{text-align:center;font-size:11px;letter-spacing:.3em;color:var(--text-soft);margin-bottom:36px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding-bottom:80px}
+  .card{background:var(--white);border-radius:2px;overflow:hidden;transition:.3s;position:relative}
+  .card:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(120,108,96,.12)}
+  .card-link{display:block}
+  .card-img{position:relative;aspect-ratio:1/1;background:#fff;border:1px solid var(--line);overflow:hidden}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .card:hover .card-img img{transform:scale(1.05)}
+  .card-flag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:.08em;padding:4px 11px;border-radius:3px;background:var(--text);color:#fff;z-index:2}
+  .card-body{padding:14px 8px 12px}
+  .card-cat{font-size:10px;color:var(--text-soft);letter-spacing:.14em}
+  .card-name{font-size:13px;margin:5px 0 7px;min-height:38px}
+  .card:hover .card-name{color:var(--pink-deep)}
+  .card-price{font-size:15px;font-weight:600}
+  .card-price small{font-size:10px;font-weight:400;color:var(--text-soft)}
+  .btn-remove{position:absolute;top:10px;right:10px;z-index:3;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);border:none;cursor:pointer;font-size:17px;color:var(--pink-deep);display:flex;align-items:center;justify-content:center;line-height:1;transition:.2s}
+  .btn-remove:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.14)}
+  .empty{text-align:center;color:var(--text-soft);padding:80px 0 120px}
+  .empty p{margin-bottom:24px;font-size:13px}
+  .empty a{display:inline-block;padding:14px 44px;background:var(--text);color:#fff;border-radius:2px;font-size:12px;letter-spacing:.22em}
+  footer{background:var(--text);color:#9b9288;font-size:11px;padding:40px 0;text-align:center}
+  @media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.grid{gap:14px}}
+</style>
+</head>
+<body>
+<div class="topbar">¥10,000以上で全国送料無料／¥10,000未満は全国一律¥600</div>
+<header>
+  <div class="container header-inner">
+    <a href="blancblanc.html" class="logo">blancblanc<i>DOG LIFESTYLE</i></a>
+    <div class="header-icons">
+      <a href="#"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg><span>検索</span></a>
+      <a href="favorites.html" style="position:relative;color:var(--pink-deep)"><svg class="icon" viewBox="0 0 24 24" style="stroke:var(--pink-deep)"><path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 Z"/></svg><span>お気に入り</span><b data-fav-badge style="display:none;position:absolute;top:-6px;right:6px;background:var(--pink-deep);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 4px">0</b></a>
+      <a href="cart.html" style="position:relative"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg><span>カート</span><b data-cart-badge style="display:none;position:absolute;top:-6px;right:6px;background:var(--pink-deep);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 4px">0</b></a>
+    </div>
+  </div>
+  <nav>
+    <ul class="nav-list container">
+      <li><a href="blancblanc.html">HOME</a></li>
+      <li><a href="goods.html">ALL ITEM</a></li>
+      <li class="sale"><a href="#">SALE</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container">
+  <h1 class="page-ttl">FAVORITES</h1>
+  <p class="page-sub">お気に入りリスト</p>
+  <div id="app"></div>
+</div>
+
+<footer>© 2026 blancblanc. All rights reserved.</footer>
+
+<script src="favs.js"></script>
+<script src="cart.js"></script>
+<script src="products.js"></script>
+<script>
+  const yen = n => '¥' + n.toLocaleString('ja-JP');
+  const app = document.getElementById('app');
+
+  function render() {
+    const ids = Favs.ids();
+    const prods = ids.map(id => (window.PRODUCTS || []).find(p => p.id === id)).filter(Boolean);
+    if (!prods.length) {
+      app.innerHTML = '<div class="empty"><p>お気に入りに追加した商品はありません。</p><a href="goods.html">商品を見る</a></div>';
+      return;
+    }
+    app.innerHTML = '<div class="grid">' + prods.map(p => `
+      <div class="card">
+        <a class="card-link" href="product.html?id=${p.id}">
+          <div class="card-img">
+            ${p.badge ? `<span class="card-flag">${p.badge}</span>` : ''}
+            <img src="${p.imgs[0]}" alt="${p.name}">
+          </div>
+          <div class="card-body">
+            <p class="card-cat">${p.tag || ''}</p>
+            <p class="card-name">${p.name}</p>
+            <p class="card-price">${yen(p.price)}${(p.variants && p.variants.length && p.variants.some(v => v.price !== p.price)) ? '〜' : ''} <small>(税込)</small></p>
+          </div>
+        </a>
+        <button class="btn-remove" onclick="removeFav('${p.id}')" title="お気に入りから外す">❤</button>
+      </div>`).join('') + '</div>';
+  }
+
+  window.removeFav = function(id) { Favs.remove(id); render(); };
+
+  render();
+  document.addEventListener('bb-fav-change', render);
+</script>
+</body>
+</html>
