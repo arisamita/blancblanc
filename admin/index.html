@@ -100,6 +100,7 @@
   <div class="tabs">
     <div class="tab on" data-tab="orders">注文管理</div>
     <div class="tab" data-tab="products">商品管理</div>
+    <div class="tab" data-tab="coupons">クーポン管理</div>
   </div>
 
   <!-- 注文管理 -->
@@ -108,6 +109,29 @@
     <div class="panel">
       <div class="panel-head"><h2>注文一覧</h2><button class="btn btn-line btn-sm" onclick="loadOrders()">更新</button></div>
       <div id="ordersTable"></div>
+    </div>
+  </div>
+
+  <!-- クーポン管理 -->
+  <div class="wrap" id="tab-coupons" style="display:none">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>クーポン一覧</h2>
+        <button class="btn btn-dark btn-sm" onclick="openCouponForm()">＋ 新規クーポン</button>
+      </div>
+      <div id="couponsTable"></div>
+    </div>
+    <div class="modal-bg" id="couponModal">
+      <div class="modal" style="max-width:400px">
+        <h3>クーポンを追加</h3>
+        <div class="fld"><label>クーポンコード（大文字英数）*</label><input id="cpCode" placeholder="例: WELCOME10" style="text-transform:uppercase"></div>
+        <div class="fld"><label>割引率（%）*</label><input id="cpPct" type="number" min="1" max="99" placeholder="例: 10"></div>
+        <div class="err" id="cpErr"></div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-line" onclick="closeModal('couponModal')">キャンセル</button>
+          <button type="button" class="btn btn-dark" onclick="saveCoupon()">保存</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -202,6 +226,8 @@
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on')); t.classList.add('on');
     document.getElementById('tab-orders').style.display = t.dataset.tab==='orders'?'block':'none';
     document.getElementById('tab-products').style.display = t.dataset.tab==='products'?'block':'none';
+    document.getElementById('tab-coupons').style.display = t.dataset.tab==='coupons'?'block':'none';
+    if(t.dataset.tab==='coupons') loadCoupons();
   }));
 
   // ---- 注文 ----
@@ -325,6 +351,39 @@
     if(!confirm('「'+name+'」を削除しますか？この操作は元に戻せません。')) return;
     await api('/admin/api/products/'+id,{method:'DELETE'}); loadProducts();
   }
+  // ---- クーポン ----
+  async function loadCoupons(){
+    const cs = await api('/admin/api/coupons');
+    if(!cs.length){ document.getElementById('couponsTable').innerHTML='<div class="empty">クーポンがありません</div>'; return; }
+    document.getElementById('couponsTable').innerHTML=`<table>
+      <thead><tr><th>コード</th><th>割引率</th><th>作成日</th><th></th></tr></thead>
+      <tbody>${cs.map(c=>`<tr>
+        <td><b>${esc(c.code)}</b></td>
+        <td>${c.discount_pct}%OFF</td>
+        <td>${esc(c.created_at)}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="delCoupon('${esc(c.code)}')">削除</button></td>
+      </tr>`).join('')}</tbody></table>`;
+  }
+  function openCouponForm(){
+    document.getElementById('cpCode').value='';
+    document.getElementById('cpPct').value='';
+    document.getElementById('cpErr').textContent='';
+    document.getElementById('couponModal').classList.add('open');
+  }
+  async function saveCoupon(){
+    const code=document.getElementById('cpCode').value.trim().toUpperCase();
+    const pct=document.getElementById('cpPct').value.trim();
+    document.getElementById('cpErr').textContent='';
+    try{
+      await api('/admin/api/coupons',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,discount_pct:parseInt(pct)})});
+      closeModal('couponModal'); loadCoupons();
+    }catch(err){ document.getElementById('cpErr').textContent=err.message; }
+  }
+  async function delCoupon(code){
+    if(!confirm(`「${code}」を削除しますか？`)) return;
+    await api('/admin/api/coupons/'+encodeURIComponent(code),{method:'DELETE'}); loadCoupons();
+  }
+
   window.closeModal = (id)=> document.getElementById(id).classList.remove('open');
   document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 

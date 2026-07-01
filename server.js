@@ -114,7 +114,7 @@ function priceOf(p, label) {
 }
 
 // クライアントのカート（id,qty,color）から、サーバー側で正しい金額を組み立てる
-function buildOrderFromCart(items) {
+function buildOrderFromCart(items, couponCode = null) {
   const lines = [];
   let subtotal = 0;
   for (const it of items || []) {
@@ -122,18 +122,25 @@ function buildOrderFromCart(items) {
     if (!p || !p.active) continue;
     const qty = Math.max(1, Math.min(99, parseInt(it.qty, 10) || 1));
     const unit = priceOf(p, it.color);
-    const lineTotal = unit * qty;
-    subtotal += lineTotal;
+    subtotal += unit * qty;
     lines.push({ product_id: p.id, name: p.name, price: unit, qty, color: it.color || null, img: (p.imgs || [])[0] || null });
   }
-  const shipping = subtotal > 0 && subtotal < config.freeShippingThreshold ? config.shippingFee : 0;
-  return { lines, subtotal, shipping, total: subtotal + shipping };
+  let discount = 0;
+  let appliedCode = null;
+  if (couponCode) {
+    const code = String(couponCode).trim().toUpperCase();
+    const coupon = db.prepare('SELECT * FROM coupons WHERE code=? AND active=1').get(code);
+    if (coupon) { discount = Math.floor(subtotal * coupon.discount_pct / 100); appliedCode = code; }
+  }
+  const afterDiscount = subtotal - discount;
+  const shipping = afterDiscount > 0 && afterDiscount < config.freeShippingThreshold ? config.shippingFee : 0;
+  return { lines, subtotal, discount, shipping, total: afterDiscount + shipping, couponCode: appliedCode };
 }
 
 function saveOrder(order, customer) {
   const id = genOrderId();
-  db.prepare(`INSERT INTO orders (id,customer_name,email,phone,postal,address,note,subtotal,shipping,total,status,payment_status)
-    VALUES (@id,@customer_name,@email,@phone,@postal,@address,@note,@subtotal,@shipping,@total,'pending','unpaid')`).run({
+  db.prepare(`INSERT INTO orders (id,customer_name,email,phone,postal,address,note,subtotal,discount,shipping,total,coupon_code,status,payment_status)
+    VALUES (@id,@customer_name,@email,@phone,@postal,@address,@note,@subtotal,@discount,@shipping,@total,@coupon_code,'pending','unpaid')`).run({
     id,
     customer_name: customer.name || null,
     email: customer.email || null,
@@ -142,8 +149,10 @@ function saveOrder(order, customer) {
     address: customer.address || null,
     note: customer.note || null,
     subtotal: order.subtotal,
+    discount: order.discount || 0,
     shipping: order.shipping,
     total: order.total,
+    coupon_code: order.couponCode || null,
   });
   const ins = db.prepare('INSERT INTO order_items (order_id,product_id,name,price,qty,color) VALUES (?,?,?,?,?,?)');
   order.lines.forEach((l) => ins.run(id, l.product_id, l.name, l.price, l.qty, l.color));
@@ -184,10 +193,20 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, listProducts({ activeOnly: true }));
     }
 
+    // クーポン検証
+    if (pathname === '/api/coupon/validate' && method === 'POST') {
+      const body = await readJson(req);
+      const code = String(body.code || '').trim().toUpperCase();
+      if (!code) return sendJson(res, 400, { valid: false, error: 'コードを入力してください' });
+      const coupon = db.prepare('SELECT * FROM coupons WHERE code=? AND active=1').get(code);
+      if (!coupon) return sendJson(res, 200, { valid: false, error: '無効なクーポンコードです' });
+      return sendJson(res, 200, { valid: true, discount_pct: coupon.discount_pct, label: `${coupon.discount_pct}%OFF` });
+    }
+
     // チェックアウト：注文作成 + Stripe Checkout セッション
     if (pathname === '/api/checkout' && method === 'POST') {
       const body = await readJson(req);
-      const order = buildOrderFromCart(body.items);
+      const order = buildOrderFromCart(body.items, body.couponCode);
       if (order.lines.length === 0) return sendJson(res, 400, { error: 'カートが空です' });
       const orderId = saveOrder(order, body.customer || {});
 
@@ -317,6 +336,26 @@ const server = http.createServer(async (req, res) => {
       if (pathname.startsWith('/admin/api/products/') && method === 'DELETE') {
         const id = pathname.split('/').pop();
         db.prepare('DELETE FROM products WHERE id=?').run(id);
+        return sendJson(res, 200, { ok: true });
+      }
+
+      // クーポン CRUD
+      if (pathname === '/admin/api/coupons' && method === 'GET') {
+        return sendJson(res, 200, db.prepare('SELECT * FROM coupons ORDER BY created_at DESC').all());
+      }
+      if (pathname === '/admin/api/coupons' && method === 'POST') {
+        const b = await readJson(req);
+        const code = String(b.code || '').trim().toUpperCase();
+        const pct = parseInt(b.discount_pct, 10);
+        if (!code || !pct || pct < 1 || pct > 99) return sendJson(res, 400, { error: 'コードと割引率（1〜99）が必要です' });
+        try {
+          db.prepare('INSERT INTO coupons (code, discount_pct) VALUES (?, ?)').run(code, pct);
+          return sendJson(res, 200, { ok: true, code });
+        } catch { return sendJson(res, 400, { error: 'このコードはすでに存在します' }); }
+      }
+      if (pathname.startsWith('/admin/api/coupons/') && method === 'DELETE') {
+        const code = pathname.split('/').pop().toUpperCase();
+        db.prepare('DELETE FROM coupons WHERE code=?').run(code);
         return sendJson(res, 200, { ok: true });
       }
 

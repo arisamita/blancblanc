@@ -77,9 +77,18 @@
       <div class="panel" style="margin-bottom:20px">
         <h2>ご注文金額</h2>
         <div class="row"><span>小計</span><span id="sumSubtotal">¥0</span></div>
+        <div class="row" id="discountRow" style="display:none;color:var(--pink-deep)"><span id="discountLabel">クーポン割引</span><span id="sumDiscount"></span></div>
         <div class="row"><span>送料</span><span id="sumShipping">¥0</span></div>
         <div class="row total"><span>合計</span><span id="sumTotal">¥0</span></div>
         <p class="ship-note" id="shipNote"></p>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+          <p style="font-size:11px;color:var(--text-soft);margin-bottom:7px;letter-spacing:.06em">クーポンコード</p>
+          <div style="display:flex;gap:8px">
+            <input id="couponInput" placeholder="コードを入力" style="flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;background:#fff">
+            <button type="button" id="couponBtn" style="padding:9px 16px;background:var(--text);color:#fff;border:none;border-radius:7px;font-size:12px;cursor:pointer;white-space:nowrap">適用</button>
+          </div>
+          <p id="couponMsg" style="font-size:11px;margin-top:6px;min-height:16px"></p>
+        </div>
       </div>
       <div class="panel">
         <h2>お客様情報</h2>
@@ -103,6 +112,7 @@
 <script>
   const yen = (n) => '¥' + Number(n).toLocaleString('ja-JP');
   let CFG = { freeShippingThreshold: 10000, shippingFee: 600, stripeEnabled: false };
+  let couponCode = null, couponPct = 0;
   const byId = (id) => (window.PRODUCTS || []).find((p) => p.id === id);
   const priceOf = (p, label) => {
     if (Array.isArray(p.variants) && p.variants.length) {
@@ -157,15 +167,57 @@
   }
 
   function updateSummary(subtotal) {
-    const shipping = subtotal > 0 && subtotal < CFG.freeShippingThreshold ? CFG.shippingFee : 0;
+    const discount = couponPct > 0 ? Math.floor(subtotal * couponPct / 100) : 0;
+    const afterDiscount = subtotal - discount;
+    const shipping = afterDiscount > 0 && afterDiscount < CFG.freeShippingThreshold ? CFG.shippingFee : 0;
     document.getElementById('sumSubtotal').textContent = yen(subtotal);
+    const dr = document.getElementById('discountRow');
+    if (discount > 0) {
+      dr.style.display = '';
+      document.getElementById('discountLabel').textContent = `クーポン（${couponPct}%OFF）`;
+      document.getElementById('sumDiscount').textContent = '−' + yen(discount);
+    } else { dr.style.display = 'none'; }
     document.getElementById('sumShipping').textContent = shipping ? yen(shipping) : '無料';
-    document.getElementById('sumTotal').textContent = yen(subtotal + shipping);
+    document.getElementById('sumTotal').textContent = yen(afterDiscount + shipping);
     const note = document.getElementById('shipNote');
-    if (subtotal > 0 && subtotal < CFG.freeShippingThreshold) {
-      note.textContent = `あと ${yen(CFG.freeShippingThreshold - subtotal)} で送料無料`;
+    if (afterDiscount > 0 && afterDiscount < CFG.freeShippingThreshold) {
+      note.textContent = `あと ${yen(CFG.freeShippingThreshold - afterDiscount)} で送料無料`;
     } else note.textContent = '';
   }
+
+  async function applyCoupon() {
+    const input = document.getElementById('couponInput');
+    const code = input.value.trim().toUpperCase();
+    const msg = document.getElementById('couponMsg');
+    if (!code) { msg.style.color = '#b56a6a'; msg.textContent = 'コードを入力してください'; return; }
+    const btn = document.getElementById('couponBtn');
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/coupon/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+      const d = await r.json();
+      if (d.valid) {
+        couponCode = code; couponPct = d.discount_pct;
+        msg.style.color = 'var(--pink-deep)'; msg.textContent = `✓ ${d.label} が適用されました`;
+        input.disabled = true; btn.textContent = '取消';
+        btn.onclick = removeCoupon;
+      } else { msg.style.color = '#b56a6a'; msg.textContent = d.error || '無効なコードです'; }
+    } catch { msg.style.color = '#b56a6a'; msg.textContent = 'エラーが発生しました'; }
+    btn.disabled = false;
+    render();
+  }
+
+  function removeCoupon() {
+    couponCode = null; couponPct = 0;
+    const input = document.getElementById('couponInput');
+    input.value = ''; input.disabled = false;
+    const btn = document.getElementById('couponBtn');
+    btn.textContent = '適用'; btn.onclick = applyCoupon;
+    document.getElementById('couponMsg').textContent = '';
+    render();
+  }
+
+  document.getElementById('couponBtn').onclick = applyCoupon;
+  document.getElementById('couponInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') applyCoupon(); });
 
   window.chg = (id, color, d) => {
     const it = Cart.items().find((i) => i.id === id && (i.color || '') === color);
@@ -180,6 +232,8 @@
     const fd = new FormData(e.target);
     const customer = Object.fromEntries(fd.entries());
     sessionStorage.setItem('bb_customer', JSON.stringify(customer));
+    if (couponCode) sessionStorage.setItem('bb_coupon', JSON.stringify({ code: couponCode, pct: couponPct }));
+    else sessionStorage.removeItem('bb_coupon');
     location.href = 'confirm.html';
   });
 </script>

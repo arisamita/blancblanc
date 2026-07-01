@@ -86,6 +86,8 @@
   const items = Cart.items();
   let customer = null;
   try { customer = JSON.parse(sessionStorage.getItem('bb_customer') || 'null'); } catch (_) {}
+  let coupon = null;
+  try { coupon = JSON.parse(sessionStorage.getItem('bb_coupon') || 'null'); } catch (_) {}
 
   const app = document.getElementById('app');
 
@@ -116,17 +118,20 @@
       </div>`;
     }).join('');
 
-    const shipping = subtotal > 0 && subtotal < CFG.freeShippingThreshold ? CFG.shippingFee : 0;
-    const total = subtotal + shipping;
+    const discount = coupon ? Math.floor(subtotal * coupon.pct / 100) : 0;
+    const afterDiscount = subtotal - discount;
+    const shipping = afterDiscount > 0 && afterDiscount < CFG.freeShippingThreshold ? CFG.shippingFee : 0;
+    const total = afterDiscount + shipping;
 
     app.innerHTML = `
       <div class="panel">
         <h2>ご注文商品<span class="edit-link" onclick="location.href='cart.html'">カートを編集</span></h2>
         ${itemsHtml}
         <div class="row" style="margin-top:10px"><span>小計</span><span>${yen(subtotal)}</span></div>
+        ${discount > 0 ? `<div class="row" style="color:var(--pink-deep)"><span>クーポン（${coupon.pct}%OFF）</span><span>−${yen(discount)}</span></div>` : ''}
         <div class="row"><span>送料</span><span>${shipping ? yen(shipping) : '無料'}</span></div>
         <div class="row total"><span>合計</span><span>${yen(total)}</span></div>
-        ${subtotal < CFG.freeShippingThreshold ? `<p class="ship-note">あと ${yen(CFG.freeShippingThreshold - subtotal)} で送料無料</p>` : ''}
+        ${afterDiscount > 0 && afterDiscount < CFG.freeShippingThreshold ? `<p class="ship-note">あと ${yen(CFG.freeShippingThreshold - afterDiscount)} で送料無料</p>` : ''}
       </div>
 
       <div class="panel">
@@ -158,12 +163,13 @@
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, customer }),
+        body: JSON.stringify({ items, customer, couponCode: coupon?.code || null }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || '注文に失敗しました');
       sessionStorage.setItem('bb_last_order', data.orderId);
       sessionStorage.removeItem('bb_customer');
+      sessionStorage.removeItem('bb_coupon');
       Cart.clear();
       location.href = data.redirectUrl;
     } catch (err) {
