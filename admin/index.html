@@ -158,7 +158,7 @@
     <div class="fld"><label>商品名 *</label><input name="name" required></div>
     <div class="grid2">
       <div class="fld"><label>カテゴリ</label>
-        <select name="cat"><option value="toy">おもちゃ</option><option value="interior">インテリア</option><option value="carry">キャリーバッグ</option><option value="wear">ドッグウェア</option></select>
+        <select name="cat"><option value="nosework">ノーズワーク</option><option value="plush">ぬいぐるみ</option><option value="rope">ロープ・ラテックス</option><option value="bowl">ボウル・マット</option><option value="carry">キャリーバッグ</option></select>
       </div>
       <div class="fld"><label>タグ（例: TOY / NOSE WORK）</label><input name="tag"></div>
     </div>
@@ -180,6 +180,7 @@
       <div class="fld"><label>カラー/タイプ（カンマ区切り）</label><input name="colors" placeholder="ピンク, ブルー"></div>
       <div class="fld"><label>セット内容（カンマ区切り）</label><input name="set"></div>
     </div>
+    <div class="fld"><label>バリエーション（JSON形式・任意）<span style="font-weight:400;color:var(--text-soft)">　例: [{"label":"3点セット","price":3480},{"label":"単品","price":1280}]</span></label><textarea name="variantsJson" rows="2" placeholder='[{"label":"タイプA","price":1000},{"label":"タイプB","price":1500}]' style="font-size:11px;font-family:monospace"></textarea></div>
     <div class="grid2">
       <div class="fld"><label>バッジ</label><input name="badge" placeholder="NEW"></div>
       <div class="fld"><label>表示</label><select name="active"><option value="1">表示する</option><option value="0">非表示</option></select></div>
@@ -322,6 +323,7 @@
     f.lead.value=p.lead||''; f.size.value=p.size||''; f.material.value=p.material||''; f.target.value=p.target||'';
     f.stock.value=p.stock!=null?p.stock:100; f.colors.value=(p.colors||[]).join(', '); f.set.value=(p.set||[]).join(', ');
     f.badge.value=p.badge||''; f.active.value=p.active?'1':'0';
+    f.variantsJson.value=(p.variants&&p.variants.length)?JSON.stringify(p.variants):'';
     document.getElementById('pmErr').textContent='';
     document.getElementById('productModal').classList.add('open');
   }
@@ -341,6 +343,8 @@
     const f = Object.fromEntries(new FormData(e.target).entries());
     f.imgs = pmImages;
     f.active = f.active==='1';
+    try{ f.variants = f.variantsJson ? JSON.parse(f.variantsJson) : []; } catch{ document.getElementById('pmErr').textContent='バリエーションのJSON形式が正しくありません'; return; }
+    delete f.variantsJson;
     try{
       if(editingId) await api('/admin/api/products/'+editingId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(f)});
       else await api('/admin/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(f)});
