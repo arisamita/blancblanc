@@ -121,9 +121,9 @@ window.PRODUCTS = [
 
 window.CATS = [
   { key:'all',      label:'すべて' },
-  { key:'nosework', label:'知育・ノーズワーク' },
-  { key:'plush',    label:'ぬいぐるみトイ' },
-  { key:'rope',     label:'ロープ・ラテックストイ' },
-  { key:'bowl',     label:'フードボウル・マット' },
+  { key:'nosework', label:'ノーズワーク' },
+  { key:'plush',    label:'ぬいぐるみ' },
+  { key:'rope',     label:'ロープ・ラテックス' },
+  { key:'bowl',     label:'ボウル・マット' },
   { key:'carry',    label:'キャリーバッグ' },
 ];
