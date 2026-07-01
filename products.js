@@ -13,7 +13,8 @@ window.PRODUCTS = [
     material:"ポリエステル", size:"約 ひろげて 60×24cm", target:"超小型犬〜中型犬" },
 
   { id:"breakfast", name:"カフェ モーニングセット ノーズワークトイ", cat:"nosework", tag:"TOY / NOSE WORK",
-    price:2990, badge:"NEW", imgs:["breakfast.png","breakfast-dog.png"],
+    price:1280, badge:"NEW", imgs:["breakfast.png","breakfast-dog.png"],
+    variants:[{"label":"3点セット","price":3480},{"label":"ブレッド単品","price":1280},{"label":"ケーキ単品","price":1280},{"label":"コーヒー単品","price":1280}],
     lead:"クロワッサン・コーヒー・いちごショートケーキがトレイにのった、カフェ風のごっこ遊びセット。中におやつを隠せばノーズワークトイとしても楽しめます。",
     set:["クロワッサン×2","コーヒーカップ＆ソーサー","いちごショートケーキ","トレイ"],
     material:"ポリエステル（ボア・フェルト）", size:"約 トレイ22×16cm", target:"超小型犬〜中型犬" },
