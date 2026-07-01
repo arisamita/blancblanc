@@ -115,6 +115,7 @@
   /* ===== ranking ===== */
   .ranking{background:var(--beige)}
   .rank-no{position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--pink-deep);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;z-index:2;box-shadow:0 3px 8px rgba(0,0,0,.08)}
+  #rankGrid{grid-template-columns:repeat(5,1fr);gap:20px}
 
   /* ===== category banners ===== */
   .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -506,8 +507,8 @@
     if (newGrid) newGrid.innerHTML = news.map(p=>card(p, p.badge ? `<span class="card-flag ${p.badge==='COOL'?'cool':'new'}">${p.badge}</span>` : '')).join('');
 
     // RANKING：おすすめ順（編集可）。削除された商品は自動的に外れ、残り枠は他商品で補充
-    const RANK_IDS = ['goodnight','bearmat','meshivory','bear'];
-    const rank = take4(RANK_IDS.map(id=>P.find(p=>p.id===id)), P);
+    const RANK_IDS = ['goodnight','breakfast','meshivory','bearmat','cake'];
+    const rank = RANK_IDS.map(id=>P.find(p=>p.id===id)).filter(Boolean);
     const rankGrid = document.getElementById('rankGrid');
     if (rankGrid) rankGrid.innerHTML = rank.map((p,i)=>card(p, `<span class="rank-no">${i+1}</span>`)).join('');
   })();
